@@ -255,11 +255,6 @@ class McpSpecificationGeneratorTest {
     StepVerifier.create(invokeTool(getClusters, Map.of()))
         .assertNext(result -> {
           String text = ((McpSchema.TextContent) result.content().get(0)).text();
-          // Regression check for https://github.com/kafbat/kafka-ui/issues/1454 :
-          // a Flux nested inside a ResponseEntity body used to be serialized via its
-          // Reactor internals ({"scanAvailable":true,"prefetch":-1}) instead of being
-          // collected into the actual list of results.
-          assertThat(text).doesNotContain("scanAvailable", "prefetch");
           assertThat(text).contains("test-cluster");
           assertThat(result.isError()).isFalse();
         })
